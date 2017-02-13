@@ -3,40 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <title></title>
+    <link rel="stylesheet" href="test.css"/>
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="jquery.facedetection.js"></script>
     <script src="tracker.js"></script>
+    <script src="detectFaces.js"></script>
 </head>
 <body>
+
+<!--input canvas which get input from camera required for head tracker-->
 <canvas id="inputCanvas" width="320" height="240" style="display:none"></canvas>
-<video id="inputVideo" autoplay loop></video>
+
+<!--here live video go from input camera-->
+<video id="inputVideo" autoplay loop class="iBlock"></video>
+
+<!--now convert the detected image to base 64 required for other plugin-->
+<div class="picture-container">
+    <img src="" alt="" id="picture" width="640" height="480"/>
+</div>
+
+<!-- here just we got image when face tracker event found -->
+<canvas id="detectedImage" width="640" height="480" style="display:none"></canvas>
 <hr/>
-<button id="snap"> snap </button>
-<canvas id="detectedImage" width="320" height="240"></canvas>
+<button id="convert" onclick="base64Image()">detect Faces</button>
+<button id="try-it" onclick="detectImages(event)">detect Faces</button>
+
 <script type="text/javascript">
     var videoInput = document.getElementById('inputVideo');
     var canvasInput = document.getElementById('inputCanvas');
 
+    //start to head tracker to work
     var htracker = new headtrackr.Tracker();
     htracker.init(videoInput, canvasInput);
     htracker.start();
     var canvas = document.getElementById('detectedImage');
     var context = canvas.getContext('2d');
-    document.getElementById("snap").addEventListener("click", function() {
-        context.drawImage(videoInput, 0, 0, 320, 240);
-    });
 
-
+    //listen to face tracker event
     document.addEventListener('facetrackingEvent', function(evt) {
-        ///this will execute only once
-        console.log(evt)
-        context.drawImage(videoInput, evt.y, evt.x, evt.height, evt.width);
+
+        //draw tracking image to canvas
+        context.drawImage(videoInput, 0, 0, 640, 480);
+
+        //now remove the listener we got the image
         this.removeEventListener('facetrackingEvent', arguments.callee);
+
+        //convert the image to base64
+        base64Image();
     });
-    //
-//    var handler = function(evt){
-//        console.log(evt);
-//    };
-//    document.addEventListener('facetrackingEvent', handler)
-//    document.removeEventListener('facetrackingEvent', handler)
 </script>
 
 
