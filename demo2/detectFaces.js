@@ -1,3 +1,4 @@
+//here all detected image display
 var canvasObjects = {};
 //detect the face from base64 image
 function detectImages(e){
@@ -34,7 +35,8 @@ function base64Image(){
     $("#picture").attr("src", $('#detectedImage')[0].toDataURL());
 }
 
-function cropImages (f, index){
+//crop image and display
+function cropImages ( f, index ){
     //face found
     if( f ){
         //get body
@@ -49,8 +51,9 @@ function cropImages (f, index){
         //get new created canvas context
         var ctx1 = canvasObjects[index].getContext("2d");
 
-        //now get to x y and width and height of current Face
-        var croppedImage = ctx.getImageData(f.x, f.y, f.width, f.height);
+        //now get to x y and width and height of current Faces
+        //margin added in both width and height
+        var croppedImage = ctx.getImageData( f.x - 7, f.y - 7, f.width + 20, f.height + 40 );
         //draw image with given values to new canvas
         ctx1.putImageData(croppedImage, 0, 0);
         //all done just append the canvas to body
