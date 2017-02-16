@@ -39,19 +39,7 @@
     htracker.start();
     var canvas = document.getElementById('detectedImage');
     var context = canvas.getContext('2d');
-
-    //listen to face tracker event
-    document.addEventListener('facetrackingEvent', function(evt) {
-
-        //draw tracking image to canvas
-        context.drawImage(videoInput, 0, 0, 640, 480);
-
-        //now remove the listener we got the image
-        this.removeEventListener('facetrackingEvent', arguments.callee);
-
-        //convert the image to base64
-        base64Image();
-    });
+    attachEvent(videoInput)
 </script>
 
 

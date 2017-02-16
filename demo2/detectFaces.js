@@ -2,7 +2,7 @@
 var canvasObjects = {};
 //detect the face from base64 image
 function detectImages(e){
-    e.preventDefault();
+    e && e.preventDefault();
 
     $('.face').remove();
 
@@ -33,6 +33,8 @@ function detectImages(e){
 //convert the image to base 64
 function base64Image(){
     $("#picture").attr("src", $('#detectedImage')[0].toDataURL());
+
+    detectImages();
 }
 
 //crop image and display
@@ -59,4 +61,23 @@ function cropImages ( f, index ){
         //all done just append the canvas to body
         body.appendChild(canvasObjects[index])
     }
+}
+
+function attachEvent(videoInput){
+    //listen to face tracker event
+    document.addEventListener('facetrackingEvent', function(evt) {
+
+        //draw tracking image to canvas
+        context.drawImage(videoInput, 0, 0, 640, 480);
+
+        //now remove the listener we got the image
+        this.removeEventListener('facetrackingEvent', arguments.callee);
+
+        setTimeout(function(){
+            attachEvent(videoInput)
+        }, 5000);
+
+        //convert the image to base64
+        base64Image();
+    });
 }
