@@ -144,7 +144,7 @@
             } else {
                 return false;
             }
-        }
+        };
 
         this.init = function(video, canvas, setupVideo) {
             if (setupVideo === undefined || setupVideo == true) {

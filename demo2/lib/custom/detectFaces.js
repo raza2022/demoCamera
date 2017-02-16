@@ -1,5 +1,6 @@
 //here all detected image display
 var canvasObjects = {};
+
 //detect the face from base64 image
 function detectImages(e){
     e && e.preventDefault();
@@ -31,8 +32,8 @@ function detectImages(e){
 }
 
 //convert the image to base 64
-function base64Image(){
-    $("#picture").attr("src", $('#detectedImage')[0].toDataURL());
+function base64Image(canvas){
+    $("#picture").attr("src", canvas.toDataURL());
 
     detectImages();
 }
@@ -48,22 +49,31 @@ function cropImages ( f, index ){
 
         //get old canvas for cropping
         var i = document.getElementById("detectedImage");
+
         //get old image context
         var ctx = i.getContext("2d");
+
         //get new created canvas context
         var ctx1 = canvasObjects[index].getContext("2d");
 
         //now get to x y and width and height of current Faces
         //margin added in both width and height
         var croppedImage = ctx.getImageData( f.x - 7, f.y - 7, f.width + 20, f.height + 40 );
+
         //draw image with given values to new canvas
         ctx1.putImageData(croppedImage, 0, 0);
+
+        //TODO:here we modify the image to server instead of append in body
+        sendToSever(canvasObjects[index].toDataURL());
+
         //all done just append the canvas to body
         body.appendChild(canvasObjects[index])
+
+
     }
 }
 
-function attachEvent(videoInput){
+function attachEvent(videoInput, canvas){
     //listen to face tracker event
     document.addEventListener('facetrackingEvent', function(evt) {
 
@@ -73,11 +83,29 @@ function attachEvent(videoInput){
         //now remove the listener we got the image
         this.removeEventListener('facetrackingEvent', arguments.callee);
 
-        setTimeout(function(){
-            attachEvent(videoInput)
-        }, 5000);
-
         //convert the image to base64
-        base64Image();
+        base64Image(canvas);
+
+        //re-attach the event after 5 seconds
+        setTimeout(function(){
+            attachEvent(videoInput, canvas)
+        }, 5000);
+    });
+}
+
+//upload image to server
+function sendToSever(imageUrl){
+    $.ajax({
+        type: "POST",
+        url: "", //here python server url goes
+        data: {
+            imgBase64: imageUrl
+        }
+    }).done(function(o) {
+        //console.log('saved');
+        // If you want the file to be visible in the browser
+        // - please modify the callback in javascript. All you
+        // need is to return the url to the file, you just saved
+        // and than put the image in your browser.
     });
 }
