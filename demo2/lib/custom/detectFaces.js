@@ -97,12 +97,12 @@ function attachEvent(videoInput, canvas){
 function sendToSever(imageUrl){
     $.ajax({
         type: "POST",
-        url: "", //here python server url goes
+        url: "http://localhost:9000/", //here python server url goes
         data: {
-            imgBase64: imageUrl
+            croppedImage: imageUrl
         }
     }).done(function(o) {
-        //console.log('saved');
+        console.log('saved');
         // If you want the file to be visible in the browser
         // - please modify the callback in javascript. All you
         // need is to return the url to the file, you just saved
