@@ -97,7 +97,7 @@ function attachEvent(videoInput, canvas){
 function sendToSever(imageUrl){
     $.ajax({
         type: "POST",
-        url: "http://localhost:9000/", //here python server url goes
+        url: "http://127.0.0.1:8000/polls/", //here python server url goes
         data: {
             croppedImage: imageUrl
         }
