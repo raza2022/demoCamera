@@ -46,6 +46,8 @@ function cropImages ( f, index ){
         var body = $('body')[0];
         //create new canvas for cropped Image
         canvasObjects[index] = document.createElement('canvas');
+        canvasObjects[index].width = f.width + 20;
+        canvasObjects[index].height = f.width + 40;
 
         //get old canvas for cropping
         var i = document.getElementById("detectedImage");
@@ -97,7 +99,8 @@ function attachEvent(videoInput, canvas){
 function sendToSever(imageUrl){
     $.ajax({
         type: "POST",
-        url: "http://127.0.0.1:8000/polls/", //here python server url goes
+        //url: "http://127.0.0.1:8000/polls/", //here python server url goes
+        url: "https://ancient-mesa-28439.herokuapp.com/polls/", //here python server url goes
         data: {
             croppedImage: imageUrl
         }
