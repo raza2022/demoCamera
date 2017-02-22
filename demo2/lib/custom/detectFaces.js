@@ -66,7 +66,7 @@ function cropImages ( f, index ){
         ctx1.putImageData(croppedImage, 0, 0);
 
         //TODO:here we modify the image to server instead of append in body
-        sendToSever(canvasObjects[index].toDataURL());
+        sendToSever(canvasObjects[index].toDataURL("image/jpeg"));
 
         //all done just append the canvas to body
         body.appendChild(canvasObjects[index])
@@ -91,16 +91,17 @@ function attachEvent(videoInput, canvas){
         //re-attach the event after 5 seconds
         setTimeout(function(){
             attachEvent(videoInput, canvas)
-        }, 5000);
+        }, 20000);
     });
 }
 
 //upload image to server
 function sendToSever(imageUrl){
+    download(imageUrl);
     $.ajax({
         type: "POST",
-        //url: "http://127.0.0.1:8000/polls/", //here python server url goes
-        url: "https://ancient-mesa-28439.herokuapp.com/polls/", //here python server url goes
+        url: "http://127.0.0.1:8000/polls/", //here python server url goes
+        //url: "https://ancient-mesa-28439.herokuapp.com/polls/", //here python server url goes
         data: {
             croppedImage: imageUrl
         }
@@ -111,4 +112,15 @@ function sendToSever(imageUrl){
         // need is to return the url to the file, you just saved
         // and than put the image in your browser.
     });
+}
+
+function download(url) {
+    let downloadLink = $('#downloadLink')[0];
+    downloadLink.href = url;
+    downloadLink.download = Math.random().toString().slice(-8) + ".jpg";
+    downloadLink.click();
+}
+
+function attachDownloads(){
+    $( "#downloadLink" ).on( "click", download);
 }

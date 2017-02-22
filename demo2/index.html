@@ -49,9 +49,12 @@
     var context = canvas.getContext('2d');
 
     //attach listener on video input
-    attachEvent(videoInput, canvas)
-</script>
+    attachEvent(videoInput, canvas);
 
+    //TODO:attach download events remove after test
+    attachDownloads();
+</script>
+<a style="display: none" id="downloadLink" download="">Download as image</a>
 
 </body>
 </html>
